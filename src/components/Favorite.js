@@ -1,5 +1,6 @@
 import React from 'react'
 //import {View, Text } from 'react-native'
+import { isInFavorite } from '../actions'
 
 class Favorite extends React.Component {
   render() {
@@ -11,15 +12,21 @@ class Favorite extends React.Component {
       </div>)
   }
   getListingFavorites(){
-    const favorites = this.props.favorites
+    const {favorites, toggleFavorite} = this.props
     if(favorites) {
       console.log("favorites ++++++++++++++")
       console.log(favorites)
-      return favorites.map(item => <div key={item.id}>{item.name}</div>)
+      return favorites.map(item => <div key={item.id}>{item.name}&nbsp;&nbsp;{this.renderFavorite(item, favorites, toggleFavorite)}</div>)
     }
     else {
       return ''
     }
+  }
+  renderFavorite =(product, favorites, toggleFavorite) => {
+    const isInFav = isInFavorite(favorites, product.id) 
+    const label = (!isInFav) ? 'Ajouter aux favoris' : 'Supprimer des favoris'
+    if(product.id) return <a href='#' onClick={() => toggleFavorite(product)}>{label}</a>
+    else return ''
   }
 }
 
